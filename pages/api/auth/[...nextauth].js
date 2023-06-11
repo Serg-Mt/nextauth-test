@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -15,6 +16,7 @@ export const authOptions = {
         username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
         password: { label: 'Password', type: 'password' }
       },
+      // eslint-disable-next-line no-unused-vars
       async authorize(credentials, req) {
         console.log('credentials', credentials);
         // Return null if user data could not be retrieved
