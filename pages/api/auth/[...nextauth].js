@@ -44,13 +44,30 @@ export const authOptions = {
       }
     })
   ],
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      console.debug('>> callback signIn',{ user, account, profile, email, credentials });
+      return true;
+    },
+    async redirect({ url, baseUrl }) {
+      console.debug('>> callback redirect',{ url, baseUrl });
+      return baseUrl;
+    },
+    async session({ session, user, token }) {
+      console.debug('>> callback session',{ session, user, token });
+      return session;
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      console.debug('>> callback jwt',{ token, user, account, profile, isNewUser });
+      return token;
+    }
+  }
 };
 
 const resf = NextAuth(authOptions);
 
 export default (...params) => {
   const [req] = params;
-  console.log('pages/api/auth/[...nextauth].js ');
-  console.log('>> ', req.method, ' запрос на', req.url, req.query);
+  console.debug('>> ', req.method, ' запрос на', req.url, req.query);
   return resf(...params);
 };
