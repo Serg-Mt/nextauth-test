@@ -7,6 +7,10 @@ import { PrismaClient } from '@prisma/client';
 
 import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
+import WordpressProvider from 'next-auth/providers/wordpress';
+import MailchimpProvider from 'next-auth/providers/mailchimp';
+
+// import { objectToAuthDataMap, AuthDataValidator } from '@telegram-auth/server';
 
 const prisma = new PrismaClient();
 
@@ -14,9 +18,43 @@ export const authOptions = {
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
+    WordpressProvider({
+      clientId: process.env.WORDPRESS_CLIENT_ID,
+      clientSecret: process.env.WORDPRESS_CLIENT_SECRET
+    }),
+    // CredentialsProvider({
+    //   id: 'telegram-login',
+    //   name: 'Telegram Login',
+    //   credentials: {},
+    //   async authorize(credentials, req) {
+    //     const validator = new AuthDataValidator({ botToken: `${process.env.BOT_TOKEN}` });
+
+    //     const data = objectToAuthDataMap(req.query || {});
+
+    //     const user = await validator.validate(data);
+
+    //     if (user.id && user.first_name) {
+    //       return {
+    //         id: user.id.toString(),
+    //         name: [user.first_name, user.last_name || ''].join(' '),
+    //         image: user.photo_url,
+    //       };
+    //     }
+
+    //     return null;
+    //   },
+    // }),
+
+    MailchimpProvider({
+      clientId: process.env.MAILCHIMP_CLIENT_ID,
+      clientSecret: process.env.MAILCHIMP_CLIENT_SECRET
+    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      profile(profile) {
+        return { role: profile.role ?? 'user' };
+      },
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_ID,
@@ -46,19 +84,21 @@ export const authOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.debug('>> callback signIn',{ user, account, profile, email, credentials });
+      console.debug('>> callback signIn', { user, account, profile, email, credentials });
       return true;
     },
     async redirect({ url, baseUrl }) {
-      console.debug('>> callback redirect',{ url, baseUrl });
+      console.debug('>> callback redirect', { url, baseUrl });
       return baseUrl;
     },
     async session({ session, user, token }) {
-      console.debug('>> callback session',{ session, user, token });
+      console.debug('>> callback session', { session, user, token });
+      session.user.id = user.id;
+      session.user.role = user.role;
       return session;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-      console.debug('>> callback jwt',{ token, user, account, profile, isNewUser });
+      console.debug('>> callback jwt', { token, user, account, profile, isNewUser });
       return token;
     }
   }

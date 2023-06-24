@@ -1,0 +1,56 @@
+body
+  margin: 0
+
+main
+  margin: 0.5rem  
+
+nav
+  ul
+    display: flex 
+    font-size: large
+    justify-content: space-evenly
+    box-shadow: inset 0 0 20px 2px SkyBlue 
+    list-style-type: none
+    margin: 0
+
+    li
+      padding: 0.5em
+
+    .active
+      background-color: ActiveText    
+      text-shadow: 0 0 6px black
+    /* filter: invert(100%); */
+
+    .active a
+      color: white
+
+
+table 
+  width: 100%
+  border-collapse: collapse
+
+  thead
+    background-color: DarkBlue
+    color: White
+    text-align: center
+
+    
+  img
+    display: block
+    margin: auto
+ 
+  .icon
+    height: 2em 
+
+  tbody 
+    tr:nth-of-type(even) 
+      background-color: LightGray
+
+    tr:hover 
+      background-color: gold
+  
+      & img
+        transform: scale(5)
+ 
+
+
