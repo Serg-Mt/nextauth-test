@@ -9,6 +9,10 @@ import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import WordpressProvider from 'next-auth/providers/wordpress';
 import MailchimpProvider from 'next-auth/providers/mailchimp';
+import MailRuProvider from "next-auth/providers/mailru";
+import TwitchProvider from "next-auth/providers/twitch";
+
+
 
 // import { objectToAuthDataMap, AuthDataValidator } from '@telegram-auth/server';
 
@@ -17,10 +21,19 @@ const prisma = new PrismaClient();
 export const authOptions = {
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
+  debug: true,
   providers: [
     WordpressProvider({
       clientId: process.env.WORDPRESS_CLIENT_ID,
       clientSecret: process.env.WORDPRESS_CLIENT_SECRET
+    }),
+    MailRuProvider({
+      clientId: process.env.MAILRU_CLIENT_ID,
+      clientSecret: process.env.MAILRU_CLIENT_SECRET
+    }),
+    TwitchProvider({
+      clientId: process.env.TWITCH_CLIENT_ID,
+      clientSecret: process.env.TWITCH_CLIENT_SECRET
     }),
     // CredentialsProvider({
     //   id: 'telegram-login',
