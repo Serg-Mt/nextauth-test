@@ -8,26 +8,18 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   console.debug('>> ', req.method, ' запрос на', req.url, 'session =', session);
   // console.debug('____', session?.user?.id);
-  if (session) {
+  if (session && session.user.role === 'admin') {
     try {
       return res.status(200)
-        .json({
-          user: await prisma.user.findUnique({
-            where: { id: session?.user?.id }
-          }),
-          accounts: await prisma.account.findMany({
-            where: { userId: session?.user?.id }
-          })
-        });
+        .json( await prisma.user.findMany());
     } catch (error) {
       console.log(__filename, error);
       res.status(500).send({ error });
     }
 
-
   } else {
-    res.status(401).send({
-      error: 'You must be signed in to view the protected content on this page.',
+    res.status(403).send({
+      error: 'You must be ADMIN to view the protected content on this page.',
     });
   }
 }

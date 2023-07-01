@@ -9,8 +9,8 @@ import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import WordpressProvider from 'next-auth/providers/wordpress';
 import MailchimpProvider from 'next-auth/providers/mailchimp';
-import MailRuProvider from "next-auth/providers/mailru";
-import TwitchProvider from "next-auth/providers/twitch";
+import MailRuProvider from 'next-auth/providers/mailru';
+import TwitchProvider from 'next-auth/providers/twitch';
 
 
 
