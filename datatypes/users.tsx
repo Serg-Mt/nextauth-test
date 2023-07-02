@@ -6,7 +6,7 @@ import { columnsElement } from './types';
 
 export const columns: columnsElement<User>[] =
   Object.keys(Prisma.UserScalarFieldEnum)
-    .filter(key => !'id_token'.includes(key))
+    // .filter(key => !'id_token'.includes(key))
     .map(key => ({
       name: key,
       getVal: 'image'===key 

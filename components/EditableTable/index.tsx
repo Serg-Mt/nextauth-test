@@ -23,19 +23,20 @@ export default function EditableTable<objType extends rowObj>(
     updateButton = useMemo(() => <button className='update'>✔️ok</button>, []),
     cancelButton = useMemo(() => <button className='cancel'>✖️cancel</button>, []),
     headColumns = useMemo(() => [...columns, { name: 'actions' } as columnsElement<objType>], [columns]),
-    bodyColumns = useMemo(() => [...columns, { name: 'actions',
+    bodyColumns = useMemo(() => [...columns, {
+      name: 'actions',
       getVal: obj => editRowId === obj.id
         ? <>{updateButton}{cancelButton}</>
-        : <>{editButton(obj)}{delButton(obj)}</>
-    } as columnsElement<objType>], [columns, editRowId]),
-    footColumns = useMemo(() => [...columns.map(
+        : <>{onEdit && editButton(obj)}{onDelete && delButton(obj)}</>
+    } as columnsElement<objType>], [columns, editRowId, onEdit, onDelete]),
+    footColumns = useMemo(() => onAdd && [...columns.map(
       ({ name, setVal }, i) => ({
         name,
         getVal: () => <>{setVal //  @ts-ignore
           ? <input name={name} value={addInputsVal[i]} onInput={evt => setAddInputsVal(addInputsVal.with(i, evt.currentTarget.value))} />
           : ''
         }</>
-      })), { name: 'actions', getVal: addButton }], [columns, addInputsVal]),
+      })), { name: 'actions', getVal: addButton }], [columns, addInputsVal, onAdd]),
     onClick: MouseEventHandler = useCallback((evt) => {
       const
         { target } = evt,
@@ -48,7 +49,7 @@ export default function EditableTable<objType extends rowObj>(
           return onDelete({ id } as objType);
         case button?.matches('.start-edit'):
           setEditRowId(id);
-          setEditInputsVal(columns.map(({ getVal }) => getVal(elem)));
+          elem && setEditInputsVal(columns.map(({ getVal }) => getVal(elem)));
           return;
         case button?.matches('.cancel'):
           setEditRowId(null);
@@ -62,14 +63,13 @@ export default function EditableTable<objType extends rowObj>(
           setAddInputsVal(addInputsVal.map(() => ''));
           return onAdd(newRow);
         case button?.matches('.update'):
-          newRow.id = editRowId;
-          setEditRowId(null);          
+          if (editRowId) newRow.id = editRowId;
+          setEditRowId(null);
           // Object.assign(newRow, allRows.find(el => editRowId === el.id));
           columns.forEach((col, i) => {
             if (col?.setVal)
               Object.assign(newRow, col.setVal(editInputsVal[i]));
           });
-          console.log('onEdit');
           return onEdit(newRow);
       }
     }, [onDelete, columns, addInputsVal, onAdd, allRows, onEdit, editRowId, editInputsVal]),
@@ -98,6 +98,7 @@ export default function EditableTable<objType extends rowObj>(
       }
       return res;
     }, [allRows, columns, editInputsVal, editRowId, filterValue]);
+  // console.log('table render rows=',rows);
   return <>
     filter:<input type="search" value={filterValue} onInput={evt => setFilter(evt.currentTarget.value)} />
     <table {...{ onClick }} >
@@ -105,7 +106,7 @@ export default function EditableTable<objType extends rowObj>(
       <TBody {...{ rows }} columns={bodyColumns as columnsElement<rowObj>[]} />
       <tfoot>
         <tr>
-          {footColumns.map(({ name, getVal }) => <td key={name}>
+          {footColumns?.map(({ name, getVal }) => <td key={name}>
             {getVal()}
           </td>)}
           {/* {footColumns.map(({ name, setVal }, i) => <td key={name}>

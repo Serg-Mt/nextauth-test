@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   console.debug('>> ', req.method, ' запрос на', req.url, 'session =', session);
   // console.debug('____', session?.user?.id);
-  if (session && session.user.role === 'admin') {
+  if (session && 'admin' === session.user.role) {
     try {
       return res.status(200)
         .json( await prisma.user.findMany());

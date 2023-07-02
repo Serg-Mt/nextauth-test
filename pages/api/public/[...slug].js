@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   try {
     switch (req.method) {
       case 'GET':
-        return res.status(200).json(await prisma[table].findMany());
+        return res.status(200).json(await prisma[table].findMany({orderBy: {id:'asc'}}));
       case 'POST':
         return res.status(200).json(await prisma[table].create({
           data: Object.fromEntries(new URLSearchParams(req.body).entries())
