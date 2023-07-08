@@ -1,6 +1,6 @@
 import RTable from '../components/RTable';
 import getStores from '../store/generateStores';
-import { columnsElement } from '../datatypes/types';
+import { columnsArray, accordionSymbol } from '../datatypes/types';
 
 type JSPUser = {
   id: string,
@@ -25,16 +25,19 @@ type JSPUser = {
 
 const
   jsonplaceholderStores = getStores<JSPUser>('https://jsonplaceholder.typicode.com/users/'),
-  columns: columnsElement<JSPUser>[] = [
+  columns: columnsArray<JSPUser>[] = [
     { name: 'id', getVal: ({ id }) => id },
     { name: 'Name', getVal: ({ name }) => name, setVal: val => ({ name: val }) },
     { name: 'Email', getVal: ({ email }) => email, setVal: val => ({ email: val }) },
     { name: 'Address city', getVal: obj => obj?.address?.city || '-', setVal: city => ({ address: { city } }) },
     // { name: 'Geo Coordinates', getVal: ({ address: { geo: { lat, lng } } = { geo: { lat: NaN, lng: NaN } } }) => lat + ',' + lng }
     // { name: 'Geo Coordinates', getVal: ({ address: { geo: { lat, lng } } }) => lat + ',' + lng }
-  ]
-  ;
+  ];
+
+Object.assign(columns,{[accordionSymbol]:()=>{}});
+// columns[accordionSymbol] = function(){};
+// columns['fffffffff']='fffffffff';
 
 export default function RTableDemoPage() {
-  return <RTable<JSPUser> apiStores={jsonplaceholderStores} {...{ columns }} />;
+  return <RTable<JSPUser> columns={columns} apiStores={jsonplaceholderStores} />;
 }

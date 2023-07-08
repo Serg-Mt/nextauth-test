@@ -26,8 +26,7 @@ model Account {
   id_token                 String? @db.Text
   session_state            String?
   refresh_token_expires_in Int?
-  client_id String? // попробуем
-
+  client_id                String? // попробуем
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -74,4 +73,12 @@ model Character {
   // episode String[] //List of episodes in which this character appeared.
   url     String? //Link to the character's own URL endpoint.
   created String? //Time at which the character was created in the database.
+}
+
+model TodoItem {
+  id       Int      @id @default(autoincrement())
+  order    Int?     @default(0)
+  complete Boolean  @default(false)
+  label    String
+  date     DateTime @default(now())
 }

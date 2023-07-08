@@ -17,6 +17,6 @@ export default function RTable<objType extends rowObj>(
 
   if (error) return <>Error={error}</>;
   // тут важен порядок проверки, при использовании MutatorStore loading = true 
-  if (rows) return <EditableTable<objType> {...{ rows, columns, onDelete, onAdd, onEdit }} />;
+  if (rows) return <EditableTable<objType> columns={columns} {...{ rows, onDelete, onAdd, onEdit }} />;
   if (loading) return <>Loading={loading}</>;
 }

@@ -29,6 +29,7 @@ const pages = [
   { name: 'Rick and Morty Characters', src: '/rickandmorty' },
   { name: 'RTable demo', src: '/RTable-demo' },
   { name: 'RTable demo JSPU', src: '/RTable-demo-jspu' },
+  { name: 'Todo list', src: '/Todo' },  
   { name: 'My Account', src: '/myaccount', test(session: any) { return !!session; } },
   { name: 'Admin', src: '/admin', test(session: any) { return 'admin' === session?.user?.role; } },
 

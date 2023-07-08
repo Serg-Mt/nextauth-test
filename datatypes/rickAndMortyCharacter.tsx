@@ -10,6 +10,7 @@ export const
     { name: 'Image', getVal: ({ image, name }) => image && <img src={image} className="icon" alt={name || ''} /> },
     { name: 'Name', getVal: ({ name }) => name, setVal: val => ({ name: val }) },
     { name: 'Status', getVal: ({ status }) => status, setVal: val => ({ status: val }) },
+    // { name: 'URL', getVal: ({ url }) => url && <a href={url}>{url}</a>},
   ];
 
 

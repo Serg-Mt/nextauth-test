@@ -1,5 +1,4 @@
 import { columns, Character } from '../datatypes/rickAndMortyCharacter';
-// import { useStore } from '@nanostores/react';
 import RTable from '../components/RTable';
 import getStores from '../store/generateStores';
 

@@ -65,9 +65,9 @@ export const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      profile(profile) {
-        return { role: profile.role ?? 'user' };
-      },
+      // profile(profile) {
+      //   return { role: profile.role ?? 'user' };
+      // },
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_ID,
@@ -90,7 +90,7 @@ export const authOptions = {
         // Return null if user data could not be retrieved
 
         if ('1' === credentials.username && '1' === credentials.password)
-          return { id: '1', name: 'J Smith', email: 'jsmith@example.com' };
+          return { id: '11111', name: 'J Smith', email: 'jsmith@example.com' };
         return null;
       }
     })
@@ -105,7 +105,7 @@ export const authOptions = {
     //   return baseUrl;
     // },
     async session({ session, user, token }) {
-      console.debug('>> callback session', { session, user, token });
+      console.debug('>> callback session', /* { session, user, token } */);
       session.user.id = user.id;
       session.user.role = user.role;
       return session;

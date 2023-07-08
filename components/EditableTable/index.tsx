@@ -23,13 +23,17 @@ export default function EditableTable<objType extends rowObj>(
     updateButton = useMemo(() => <button className='update'>✔️ok</button>, []),
     cancelButton = useMemo(() => <button className='cancel'>✖️cancel</button>, []),
     headColumns = useMemo(() => [...columns, { name: 'actions' } as columnsElement<objType>], [columns]),
-    bodyColumns = useMemo(() => [...columns, {
-      name: 'actions',
-      getVal: obj => editRowId === obj.id
-        ? <>{updateButton}{cancelButton}</>
-        : <>{onEdit && editButton(obj)}{onDelete && delButton(obj)}</>
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    } as columnsElement<objType>], [columns, editRowId, onEdit, onDelete]),
+    bodyColumns = useMemo(() => {
+      const res = Object.assign([], columns);
+      res.push({
+        name: 'actions',
+        getVal: obj => editRowId === obj.id
+          ? <>{updateButton}{cancelButton}</>
+          : <>{onEdit && editButton(obj)}{onDelete && delButton(obj)}</>
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      });
+      return res;
+    }, [columns, editRowId, onEdit, onDelete]),
 
     footColumns = useMemo(() => onAdd && [...columns.map(
       ({ name, setVal }, i) => ({
@@ -76,7 +80,7 @@ export default function EditableTable<objType extends rowObj>(
     }, [onDelete, columns, addInputsVal, onAdd, allRows, onEdit, editRowId, editInputsVal]),
     rows = useMemo(() => {
       let
-        res:(objType | Record<string,Element>)[] = [...allRows];
+        res: (objType | Record<string, Element>)[] = [...allRows];
       if (filterValue)
         res = res.filter(obj => columns
           .map(col => col.getVal(obj as objType)?.toString().toLowerCase())
@@ -86,7 +90,7 @@ export default function EditableTable<objType extends rowObj>(
           index = res.findIndex(el => editRowId === el.id);
         if (index) { // startTransition(() => 
           const
-            dataCopy = { ...res[index]  } ;
+            dataCopy = { ...res[index] };
           res[index] = dataCopy;
           columns.forEach(({ setVal }, i) => {
             if (setVal) {

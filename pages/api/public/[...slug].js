@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   console.debug('>> ', req.method, ' запрос на', req.url, 'slug =', { table, id });
   if (req.body) console.log('req.body=', JSON.stringify(req.body));
 
-  if (!['character'].includes(table)) {
+  if (!['character','todoItem'].includes(table)) {
     return res.status(404).send({ error: 'wrong table' });
   }
   try {
