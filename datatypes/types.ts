@@ -1,5 +1,6 @@
 import { JSX } from 'react';
 
+export const accordionSymbol = Symbol('accordion');
 
 export interface rowObj {
   id:string | number;
@@ -14,3 +15,8 @@ export type columnsElement<objType extends rowObj> = {
   setVal?: (_: Value) => ({})
 };
 
+interface hasAccordion {
+  [accordionSymbol]?:Function
+}
+
+export type columnsArray<objType extends rowObj> = columnsElement<objType> & hasAccordion;

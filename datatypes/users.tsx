@@ -8,15 +8,15 @@ export const columns: columnsElement<User>[] =
     // .filter(key => !'id_token'.includes(key))
     .map(key => ({
       name: key,
-      getVal: (k => {
-        switch (k) {
+      getVal: (fkey => {
+        switch (fkey) {
           case'image':
             // eslint-disable-next-line react/display-name
             return ({image}: User) => image ? <img src={image} className="icon" alt={''} /> : '-';
           case 'emailVerified':
             return ({emailVerified}: User) => emailVerified ? emailVerified.toLocaleString(): '' ;
           default:
-            return (obj: User) => obj[k];
+            return (obj: User) => obj[fkey];
         }
       })(key as keyof User)
     }));
