@@ -17,7 +17,7 @@ export default function RickAndMortyPage() {
   
   if (error) return <>Error={error}</>;
   // тут важен порядок проверки, при использовании MutatorStore loading = true 
-  if (rows) return <EditableTable<Character> {...{ rows, columns, onDelete, onAdd, onEdit }} />;
+  if (rows) return <EditableTable<Character> rows={rows as Character[]} columns={columns} {...{ onDelete, onAdd, onEdit}} />;
   if (loading) return <>Loading={loading}</>;
 
 }

@@ -15,6 +15,10 @@ nav
 
     li
       padding: 0.5em
+    
+    li.flex-login
+      display: flex
+      align-items: center
 
     .active
       background-color: ActiveText    
@@ -40,6 +44,9 @@ table
     background-color: DarkBlue
     color: White
     text-align: center
+    
+    tr :nth-child(odd)
+      background-color: mediumblue
 
   tfoot
     background-color: royalblue
@@ -60,6 +67,9 @@ table
   tbody 
     tr:nth-of-type(even) 
       background-color: LightGray
+    
+    tr :nth-child(even)
+      background-color: rgba(0, 0, 0, 2%)
 
     tr:hover 
       background-color: gold

@@ -100,10 +100,10 @@ export const authOptions = {
       console.debug('>> callback signIn', { user, account, profile, email, credentials });
       return true;
     },
-    async redirect({ url, baseUrl }) {
-      console.debug('>> callback redirect', { url, baseUrl });
-      return baseUrl;
-    },
+    // async redirect({ url, baseUrl }) {
+    //   console.debug('>> callback redirect', { url, baseUrl });
+    //   return baseUrl;
+    // },
     async session({ session, user, token }) {
       console.debug('>> callback session', { session, user, token });
       session.user.id = user.id;
@@ -119,8 +119,8 @@ export const authOptions = {
 
 const resf = NextAuth(authOptions);
 
-export default (...params) => {
+export default function wrapForLog(...params) {
   const [req] = params;
-  console.debug('>> ', req.method, ' запрос на', req.url, req.query);
+  console.debug('**', req.method, ' запрос на', req.url, req.query);
   return resf(...params);
-};
+}

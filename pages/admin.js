@@ -9,13 +9,13 @@ const
     { fetcher: (...keys) => fetch(keys.join('')).then(r => r.json()), }),
   $users = createFetcherStore(['/api/admin/users']);
 
-
-
 export default function Admin() {
   const
     { data: rows, loading, error } = useStore($users);
-  return <>
+  if (error) return <>Error={error}</>;
+  if (rows) return <>
     <h1>admin</h1>
     {Array.isArray(rows) && <EditableTable {...{ columns, rows }} />}
   </>;
+  if (loading) return <>Loading={loading}</>;
 }

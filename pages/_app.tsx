@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import '@/styles/globals.sass';
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
@@ -26,6 +27,7 @@ export default function App({ Component,
 const pages = [
   { name: 'Home', src: '/' },
   { name: 'Rick and Morty Characters', src: '/rickandmorty' },
+  { name: 'RTable demo', src: '/RTable-demo' },
   { name: 'My Account', src: '/myaccount', test(session: any) { return !!session; } },
   { name: 'Admin', src: '/admin', test(session: any) { return 'admin' === session?.user?.role; } },
 
@@ -37,7 +39,7 @@ function Nav() {
   return <nav>
     <ul>
       {pages.filter(page => page?.test ? page.test(session) : true).map(({ name, src }) => <li key={name} className={router.pathname === src ? 'active' : ''}><Link href={src}>{name}</Link></li>)}
-      <li><Login /></li>
+      <li className='flex-login'><Login /></li>
     </ul>
   </nav>;
 

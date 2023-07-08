@@ -15,7 +15,7 @@ export const $characters = createFetcherStore(['/api/public/character/']);
 
 export const $deleteCharacters = createMutatorStore(
   async ({ data, getCacheUpdater }) => {
-    console.debug('deleteCharacters data=', data);
+    // console.debug('deleteCharacters data=', data);
     const [updateCache, chars] = getCacheUpdater('/api/public/character/');
     updateCache(chars.filter(c => +data.id !== c.id));
     const promise = (async () => {
@@ -65,7 +65,7 @@ export const $updateCharacters = createMutatorStore(
 
 export const $addCharacters = createMutatorStore(
   async ({ data, getCacheUpdater }) => {
-    console.log('$addCharacters data=', data);
+    // console.log('$addCharacters data=', data);
     const [updateCache, chars] = getCacheUpdater('/api/public/character/');
     updateCache([...chars, data]);
 

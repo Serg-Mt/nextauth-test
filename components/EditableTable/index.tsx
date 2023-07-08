@@ -8,9 +8,9 @@ export default function EditableTable<objType extends rowObj>(
     : {
       rows: objType[],
       columns: columnsElement<objType>[],
-      onDelete: (_: objType) => Promise<any>,
-      onAdd: (_: objType) => Promise<any>,
-      onEdit: (_: objType) => Promise<any>,
+      onDelete?: (_: objType) => Promise<any>,
+      onAdd?: (_: objType) => Promise<any>,
+      onEdit?: (_: objType) => Promise<any>,
     }) {
   const
     [filterValue, setFilter] = useState(''),
@@ -28,11 +28,13 @@ export default function EditableTable<objType extends rowObj>(
       getVal: obj => editRowId === obj.id
         ? <>{updateButton}{cancelButton}</>
         : <>{onEdit && editButton(obj)}{onDelete && delButton(obj)}</>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     } as columnsElement<objType>], [columns, editRowId, onEdit, onDelete]),
+
     footColumns = useMemo(() => onAdd && [...columns.map(
       ({ name, setVal }, i) => ({
         name,
-        getVal: () => <>{setVal //  @ts-ignore
+        getVal: () => <>{setVal //  @ts-ignore   
           ? <input name={name} value={addInputsVal[i]} onInput={evt => setAddInputsVal(addInputsVal.with(i, evt.currentTarget.value))} />
           : ''
         }</>
@@ -46,7 +48,7 @@ export default function EditableTable<objType extends rowObj>(
         elem = allRows.find(el => id === el.id);
       switch (true) {
         case button?.matches('.delete'):
-          return onDelete({ id } as objType);
+          return onDelete?.({ id } as objType);
         case button?.matches('.start-edit'):
           setEditRowId(id);
           elem && setEditInputsVal(columns.map(({ getVal }) => getVal(elem)));
@@ -59,9 +61,8 @@ export default function EditableTable<objType extends rowObj>(
             if (col?.setVal)
               Object.assign(newRow, col.setVal(addInputsVal[i]));
           });
-          //  console.log('char=',char);
           setAddInputsVal(addInputsVal.map(() => ''));
-          return onAdd(newRow);
+          return onAdd?.(newRow);
         case button?.matches('.update'):
           if (editRowId) newRow.id = editRowId;
           setEditRowId(null);
@@ -70,26 +71,26 @@ export default function EditableTable<objType extends rowObj>(
             if (col?.setVal)
               Object.assign(newRow, col.setVal(editInputsVal[i]));
           });
-          return onEdit(newRow);
+          return onEdit?.(newRow);
       }
     }, [onDelete, columns, addInputsVal, onAdd, allRows, onEdit, editRowId, editInputsVal]),
     rows = useMemo(() => {
       let
-        res = [...allRows];
+        res:(objType | Record<string,Element>)[] = [...allRows];
       if (filterValue)
         res = res.filter(obj => columns
-          .map(col => col.getVal(obj)?.toString().toLowerCase())
+          .map(col => col.getVal(obj as objType)?.toString().toLowerCase())
           .some(str => str?.includes(filterValue.toLowerCase())));
       if (editRowId) {
         const
           index = res.findIndex(el => editRowId === el.id);
         if (index) { // startTransition(() => 
           const
-            dataCopy = { ...res[index] };
+            dataCopy = { ...res[index]  } ;
           res[index] = dataCopy;
           columns.forEach(({ setVal }, i) => {
             if (setVal) {
-              Object.assign(dataCopy, setVal(
+              Object.assign(dataCopy, setVal( //  @ts-ignore
                 <input value={editInputsVal[i]} onInput={evt => setEditInputsVal(editInputsVal.with(i, evt.currentTarget.value))} />
               ));
             }
@@ -98,12 +99,11 @@ export default function EditableTable<objType extends rowObj>(
       }
       return res;
     }, [allRows, columns, editInputsVal, editRowId, filterValue]);
-  // console.log('table render rows=',rows);
   return <>
     filter:<input type="search" value={filterValue} onInput={evt => setFilter(evt.currentTarget.value)} />
     <table {...{ onClick }} >
       <THead columns={headColumns as columnsElement<rowObj>[]} />
-      <TBody {...{ rows }} columns={bodyColumns as columnsElement<rowObj>[]} />
+      <TBody rows={rows as rowObj[]} columns={bodyColumns as columnsElement<rowObj>[]} />
       <tfoot>
         <tr>
           {footColumns?.map(({ name, getVal }) => <td key={name}>

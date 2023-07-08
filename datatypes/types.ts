@@ -2,12 +2,15 @@ import { JSX } from 'react';
 
 
 export interface rowObj {
-  id:number;
+  id:string | number;
 }
+
+type Value = JSX.Element | string | number | null
+
 
 export type columnsElement<objType extends rowObj> = {
   name: string,
-  getVal: (_: objType) => JSX.Element | string | number | null,
-  setVal?: (_: string) => ({})
+  getVal: (_: objType) => Value,
+  setVal?: (_: Value) => ({})
 };
 
