@@ -8,11 +8,18 @@ export default memo(function TBody<objType extends rowObj>({ rows, columns }
   return <tbody>
     {rows?.map(row =>
       <Fragment key={row.id}>
-        <tr key={row.id} data-accordion={accordionSymbol in columns ? 'yes' : 'no'} data-d2={columns[accordionSymbol] ? '1':'0'}> 
+        <tr key={row.id}> 
           {columns?.map(({ name, getVal }) => <td key={name}>
             {getVal(row)}
           </td>)}
         </tr>
+        {accordionSymbol in columns && 
+          <tr className="accordion">
+            <td colSpan={columns.length}>
+              ok
+            </td>
+          </tr>
+        }
         
       </Fragment>)}
   </tbody>;

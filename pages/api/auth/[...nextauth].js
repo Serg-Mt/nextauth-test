@@ -104,7 +104,7 @@ export const authOptions = {
     //   console.debug('>> callback redirect', { url, baseUrl });
     //   return baseUrl;
     // },
-    async session({ session, user, token }) {
+    async session({ session, user, /* token */ }) {
       console.debug('>> callback session', /* { session, user, token } */);
       session.user.id = user.id;
       session.user.role = user.role;

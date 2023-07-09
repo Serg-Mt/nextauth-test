@@ -13,6 +13,7 @@ const
     { name: 'id', getVal: ({ id }) => id },
     {
       name: 'Status', getVal: ({ id, complete }) => <input type='checkbox' checked={complete}
+        /** @ts-ignore */
         onClick={() => TodoItemStores.updateStore.get().mutate({ id, complete: !complete })}
       />
     },
