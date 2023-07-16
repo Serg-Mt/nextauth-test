@@ -8,7 +8,7 @@ export default memo(function TBody<objType extends rowObj>({ rows, columns }
   return <tbody>
     {rows?.map(row =>
       <Fragment key={row.id}>
-        <tr key={row.id}> 
+        <tr key={row.id} data-id={row.id}> 
           {columns?.map(({ name, getVal }) => <td key={name}>
             {getVal(row)}
           </td>)}

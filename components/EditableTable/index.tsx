@@ -1,7 +1,16 @@
+/* eslint-disable react/display-name */
 import TBody from './TBody';
 import THead from './THead';
 import { rowObj, columnsElement } from '../../datatypes/types';
-import { MouseEventHandler, useCallback, useMemo, useState } from 'react';
+import { MouseEventHandler, useCallback, useMemo, useState, memo } from 'react';
+
+const 
+  AddButton = memo(() => <button className='add'>➕ add</button>),
+  DelButton = memo(() => <button  className='delete'>❌delete</button>),
+  EditButton = memo(() => <button className='start-edit'>✏️edit</button>),
+  UpdateButton = memo(() => <button className='update'>✔️ok</button>),
+  CancelButton = memo(() => <button className='cancel'>✖️cancel</button>);
+
 
 export default function EditableTable<objType extends rowObj>(
   { rows: allRows, columns, onDelete, onAdd, onEdit }
@@ -17,19 +26,15 @@ export default function EditableTable<objType extends rowObj>(
     [addInputsVal, setAddInputsVal] = useState<string[]>(Array(columns.length).fill('')),
     [editRowId, setEditRowId] = useState<number | null>(null),
     [editInputsVal, setEditInputsVal] = useState(Array(columns.length).fill('')),
-    addButton = useCallback(() => <button className='add'>➕ add</button>, []),
-    delButton = useCallback((obj: objType) => <button data-id={obj.id} className='delete'>❌delete</button>, []),
-    editButton = useCallback((obj: objType) => <button data-id={obj.id} className='start-edit'>✏️edit</button>, []),
-    updateButton = useMemo(() => <button className='update'>✔️ok</button>, []),
-    cancelButton = useMemo(() => <button className='cancel'>✖️cancel</button>, []),
+
     headColumns = useMemo(() => [...columns, { name: 'actions' } as columnsElement<objType>], [columns]),
     bodyColumns = useMemo(() => {
       const res = Object.assign([], columns);
       res.push({
         name: 'actions',
         getVal: obj => editRowId === obj.id
-          ? <>{updateButton}{cancelButton}</>
-          : <>{onEdit && editButton(obj)}{onDelete && delButton(obj)}</>
+          ? <><UpdateButton /> <CancelButton /></>
+          : <>{onEdit && <EditButton />}{onDelete && <DelButton />}</>
         // eslint-disable-next-line react-hooks/exhaustive-deps
       });
       return res;
@@ -42,18 +47,20 @@ export default function EditableTable<objType extends rowObj>(
           ? <input name={name} value={addInputsVal[i]} onInput={evt => setAddInputsVal(addInputsVal.with(i, evt.currentTarget.value))} />
           : ''
         }</>
-      })), { name: 'actions', getVal: addButton }], [columns, addInputsVal, onAdd]),
+      })), { name: 'actions', getVal: ()=><AddButton /> }], [columns, addInputsVal, onAdd]),
     onClick: MouseEventHandler = useCallback((evt) => {
       const
         { target } = evt,
         button = (target as HTMLElement).closest('button'),
         newRow: objType = {} as objType,
-        id: number = +(button?.dataset.id || NaN),
+        id: number = +((button?.closest('[data-id]') as HTMLElement)?.dataset.id || NaN),
         elem = allRows.find(el => id === el.id);
       switch (true) {
         case button?.matches('.delete'):
-          return onDelete?.({ id } as objType);
+          onDelete?.({ id } as objType);
+          return;
         case button?.matches('.start-edit'):
+          console.log('start-edit',id);
           setEditRowId(id);
           elem && setEditInputsVal(columns.map(({ getVal }) => getVal(elem)));
           return;
@@ -66,7 +73,8 @@ export default function EditableTable<objType extends rowObj>(
               Object.assign(newRow, col.setVal(addInputsVal[i]));
           });
           setAddInputsVal(addInputsVal.map(() => ''));
-          return onAdd?.(newRow);
+          onAdd?.(newRow);
+          return;
         case button?.matches('.update'):
           if (editRowId) newRow.id = editRowId;
           setEditRowId(null);
@@ -75,7 +83,8 @@ export default function EditableTable<objType extends rowObj>(
             if (col?.setVal)
               Object.assign(newRow, col.setVal(editInputsVal[i]));
           });
-          return onEdit?.(newRow);
+          onEdit?.(newRow);
+          return;
       }
     }, [onDelete, columns, addInputsVal, onAdd, allRows, onEdit, editRowId, editInputsVal]),
     rows = useMemo(() => {
@@ -88,7 +97,7 @@ export default function EditableTable<objType extends rowObj>(
       if (editRowId) {
         const
           index = res.findIndex(el => editRowId === el.id);
-        if (index) { // startTransition(() => 
+        if (~index) { // startTransition(() => 
           const
             dataCopy = { ...res[index] };
           res[index] = dataCopy;
@@ -113,12 +122,6 @@ export default function EditableTable<objType extends rowObj>(
           {footColumns?.map(({ name, getVal }) => <td key={name}>
             {getVal()}
           </td>)}
-          {/* {footColumns.map(({ name, setVal }, i) => <td key={name}>
-            {setVal &&  //  @ts-ignore
-              <input name={name} value={addInputsVal[i]} onInput={evt => setAddInputsVal(addInputsVal.with(i, evt.currentTarget.value))} />
-            }
-          </td>)} 
-          <td>{addButton}</td> */}
         </tr>
       </tfoot>
     </table >

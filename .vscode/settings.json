@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
-        "jsonplaceholder",
-        "Morty",
-        "nanoquery"
-    ]
+      "jsonplaceholder",
+      "mailchimp",
+      "Morty",
+      "nanoquery"
+    ],
+    "editor.tabSize": 2
 }

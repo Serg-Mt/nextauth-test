@@ -1,6 +1,6 @@
 import RTable from '../components/RTable';
 import getStores from '../store/generateStores';
-import { columnsArray, accordionSymbol } from '../datatypes/types';
+import { columnsArray } from '../datatypes/types';
 
 type JSPUser = {
   id: string,
@@ -34,9 +34,9 @@ const
     // { name: 'Geo Coordinates', getVal: ({ address: { geo: { lat, lng } } }) => lat + ',' + lng }
   ];
 
-Object.assign(columns,{[accordionSymbol]:()=>{}});
-// columns[accordionSymbol] = function(){};
-// columns['fffffffff']='fffffffff';
+// Object.assign(columns,{[accordionSymbol]:()=>
+//   <RTable />});
+
 
 export default function RTableDemoPage() {
   return <RTable<JSPUser> columns={columns} apiStores={jsonplaceholderStores} />;

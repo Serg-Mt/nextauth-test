@@ -1,5 +1,6 @@
 import { nanoquery } from '@nanostores/query';
 // import { onSet } from 'nanostores';
+// import { logger } from '@nanostores/logger';
 
 
 
@@ -12,6 +13,7 @@ export const [createFetcherStore, createMutatorStore] = nanoquery({
 
 
 export const $characters = createFetcherStore(['/api/public/character/']);
+console.log('$characters=',$characters);
 
 export const $deleteCharacters = createMutatorStore(
   async ({ data, getCacheUpdater }) => {
@@ -92,6 +94,12 @@ export const $addCharacters = createMutatorStore(
 
   }
 );
+
+
+// let destroy = logger({
+//   characters: $characters
+// });
+
 
 // onSet($characters,obj => console.log('___ $characters', obj));
 // onSet($deleteCharacters,obj => console.log('___ $deleteCharacters', obj));

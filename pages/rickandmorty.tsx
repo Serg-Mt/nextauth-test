@@ -1,5 +1,5 @@
 import { $characters, $addCharacters, $deleteCharacters, $updateCharacters } from '../store/characters';
-import { columns } from '../datatypes/rickAndMortyCharacter';
+import { columns } from '@/datatypes/rickAndMortyCharacter';
 import { useStore } from '@nanostores/react';
 
 import { Character } from '@prisma/client';
