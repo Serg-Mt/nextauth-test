@@ -25,13 +25,13 @@ export default async function handler(req, res) {
           data: Object.fromEntries(new URLSearchParams(req.body).entries())
         }));
       case 'DELETE':
-        return res.status(200).json(await prisma[table].delete({
+        return res.status(204).json(await prisma[table].delete({
           where: {
             id: +id
           }
         }));
       case 'PUT':
-        return res.status(200).json(await prisma[table].update({
+        return res.status(201).json(await prisma[table].update({
           where: {
             id: +id
           },
