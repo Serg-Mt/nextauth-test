@@ -37,7 +37,7 @@ const pages = [
 
 function Nav() {
   const router = useRouter();
-  const { data: session } =  useSession();
+  const { data: session,  } =  useSession();
   return <nav>
     <ul>
       {pages.filter(page => page?.test ? page.test(session) : true).map(({ name, src }) => <li key={name} className={router.pathname === src ? 'active' : ''}><Link href={src}>{name}</Link></li>)}
@@ -48,7 +48,9 @@ function Nav() {
 }
 
 function Login() {
-  const { data: session } = useSession();
+  const { data: session, status  } = useSession();
+  if ('loading'===status )
+    return <button>⌛</button>;
   if (session)
     return <>
       {session?.user?.image && <img src={session?.user?.image || ''} width={32} height={32} alt="ava" />}
